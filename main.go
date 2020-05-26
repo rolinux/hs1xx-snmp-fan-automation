@@ -138,7 +138,6 @@ func turnSocketOff(hs1xxSocketIP string) {
 	if err != nil {
 		log.Println("err:", err)
 	}
-	hs1xxRelayState.Set(0)
 }
 
 func turnSocketOn(hs1xxSocketIP string) {
@@ -147,7 +146,6 @@ func turnSocketOn(hs1xxSocketIP string) {
 	if err != nil {
 		log.Println("err:", err)
 	}
-	hs1xxRelayState.Set(1)
 }
 
 func init() {
@@ -218,21 +216,27 @@ func recordMetrics() {
 				if smartSocketOnTime == 0 {
 					log.Printf("Debug: temperature too hot at %d, will start cooling\n", currentTemperature)
 					turnSocketOn(hs1xxSocketIP)
+					hs1xxRelayState.Set(1)
 				} else {
 					log.Printf("Debug: temperature too hot at %d but on, will keep cooling\n", currentTemperature)
+					hs1xxRelayState.Set(1)
 				}
 			} else if currentTemperature <= coolEnough {
 				if smartSocketOnTime == 0 {
 					log.Printf("Debug: temperature cool enough at %d and off, will keep off\n", currentTemperature)
+					hs1xxRelayState.Set(0)
 				} else {
 					log.Printf("Debug: temperature cool enough at %d and on, will turn it off\n", currentTemperature)
 					turnSocketOff(hs1xxSocketIP)
+					hs1xxRelayState.Set(0)
 				}
 			} else {
 				if smartSocketOnTime == 0 {
 					log.Printf("Debug: temperature ok at %d, will keep off\n", currentTemperature)
+					hs1xxRelayState.Set(0)
 				} else {
 					log.Printf("Debug: temperature ok at %d, will keep it running\n", currentTemperature)
+					hs1xxRelayState.Set(1)
 				}
 			}
 			// we can expose an environment variable for delay time
