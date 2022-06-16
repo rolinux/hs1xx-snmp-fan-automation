@@ -25,10 +25,10 @@ import (
 	// _ "crypto/aes"
 	// _ "crypto/sha256"
 
+	"github.com/gosnmp/gosnmp"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/rolinux/hs1xxplug"
-	"github.com/gosnmp/gosnmp"
 )
 
 var (
@@ -241,7 +241,7 @@ func recordMetrics() {
 			}
 			// we can expose an environment variable for delay time
 			// wait before checking temperature again
-			time.Sleep(1 * time.Minute)
+			time.Sleep(4 * time.Minute)
 		}
 	}()
 }
